@@ -1,4 +1,7 @@
-FROM node:23 AS development
+FROM node:24-alpine AS alpine-node-base
+RUN apk --no-cache add curl
+
+FROM alpine-node-base AS development
 WORKDIR /app
 COPY --chown=node:node package*.json ./
 COPY --chown=node:node prisma ./prisma
@@ -6,7 +9,7 @@ RUN npm ci
 COPY --chown=node:node . .
 ENTRYPOINT ["./docker/dev/entrypoint"]
 
-FROM node:23 AS build
+FROM alpine-node-base AS build
 WORKDIR /app
 COPY --chown=node:node package*.json ./
 COPY --chown=node:node prisma ./prisma
@@ -17,7 +20,7 @@ ENV NODE_ENV="production"
 RUN npm ci --only=production && npm cache clean --force
 USER node
 
-FROM node:23 AS production
+FROM alpine-node-base AS production
 COPY --chown=node:node docker/prod ./docker/prod
 COPY --chown=node:node prisma ./prisma
 COPY --chown=node:node package.json ./

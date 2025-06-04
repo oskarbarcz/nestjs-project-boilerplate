@@ -7,15 +7,15 @@ Repository contains boilerplate project using Nest.js.
 Project is using Node.js and TypeScript in versions listed below:
 
 | Technology | Version |
-| ---------- | ------- |
-| Node.js    | 23.10   |
-| TypeScript | 5.8     |
+| ---------- |--------|
+| Node.js    | 24.10  |
+| TypeScript | 5.8    |
 
 Main dependencies are Nest.js and Prisma ORM in versions listed below.
 
 | Vendor  | Version |
-| ------- | ------- |
-| Nest.js | ^11.0   |
+| ------- |---------|
+| Nest.js | ^11.1   |
 | Prisma  | ^6.7.0  |
 
 ## Infrastructure
@@ -89,12 +89,9 @@ just near the tested module, while functional tests are stored in the `features`
 
 ## Release & deploy
 
-> Before merging Pull Request to the main branch, make sure to bump the project version in the:
->
-> - `package.json` file, line `3`
-> - `compose.yaml` file, line `6`
->
-> Then it's a good practice to run `npm install` inside a docker container to update the `package-lock.json` file.
+> Before merging Pull Request to the main branch, make sure to bump the project version in the `package.json` file,
+> line `3`. Then it's a good practice to run `npm install` inside a docker container to update the `package-lock.json`
+> file.
 >
 > Not bumping the version will result in the release failure. There is a step in CI that will protect the main branch
 > from being merged without bumping the version.
