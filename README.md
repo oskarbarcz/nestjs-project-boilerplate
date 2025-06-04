@@ -7,14 +7,14 @@ Repository contains boilerplate project using Nest.js.
 Project is using Node.js and TypeScript in versions listed below:
 
 | Technology | Version |
-| ---------- |--------|
-| Node.js    | 24.10  |
-| TypeScript | 5.8    |
+| ---------- | ------- |
+| Node.js    | 24.10   |
+| TypeScript | 5.8     |
 
 Main dependencies are Nest.js and Prisma ORM in versions listed below.
 
 | Vendor  | Version |
-| ------- |---------|
+| ------- | ------- |
 | Nest.js | ^11.1   |
 | Prisma  | ^6.7.0  |
 

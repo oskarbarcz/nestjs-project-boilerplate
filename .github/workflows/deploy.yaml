@@ -17,7 +17,9 @@ jobs:
       - name: 'Clone repository'
         uses: actions/checkout@v4
       - name: 'Build app docker image'
-        run: "docker build --target production -t $(jq -r '\"ghcr.io/\(.author)/\(.name):\(.version)\"' package.json) ."
+        run: |
+          IMAGE=$(jq -r '"ghcr.io/\(.author)/\(.name):\(.version)"' package.json)
+          docker build --target production -t "$IMAGE" .
       - name: 'Release and push git tag'
         run: "git tag $(jq -r '.version' package.json) && git push --tags"
       - name: 'Create a GitHub release'
@@ -25,4 +27,6 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: 'Push docker image to ghcr.io'
-        run: "docker push $(jq -r '\"ghcr.io/\(.author)/\(.name):\(.version)\"' package.json)"
+        run: |
+          IMAGE=$(jq -r '"ghcr.io/\(.author)/\(.name):\(.version)"' package.json)
+          docker push "$IMAGE"
