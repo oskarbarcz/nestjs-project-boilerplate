@@ -2,16 +2,15 @@
   "name": "nestjs-project-boilerplate",
   "version": "0.1.0",
   "description": "",
-  "author": "Generacja Innowacja",
+  "author": "oskarbarcz",
   "private": true,
   "license": "proprietary",
   "scripts": {
     "postinstall": "npx prisma generate",
     "build": "nest build",
-    "start": "nest start",
+    "start": "node dist/src/main",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/src/main",
     "lint:fix": "eslint . --fix",
     "lint": "eslint .",
     "format": "prettier --check .",
@@ -20,7 +19,7 @@
     "test:functional": "npx cucumber-js --require ./features/_context/**/*.ts --require-module ts-node/register",
     "database:reset": "npx prisma db push --force-reset",
     "database:migrate": "npx prisma migrate deploy",
-    "database:seed": "ts-node prisma/seed/seed.ts"
+    "database:seed": "ts-node src/providers/database/seed/seed.ts"
   },
   "dependencies": {
     "@nestjs/cache-manager": "^3.0.1",
@@ -87,10 +86,10 @@
     "testEnvironment": "node"
   },
   "engines": {
-    "node": ">=23",
-    "npm": ">=10"
+    "node": ">=24",
+    "npm": ">=11"
   },
   "prisma": {
-    "seed": "ts-node prisma/seed/seed.ts"
+    "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} src/providers/database/seed/seed.ts"
   }
 }
