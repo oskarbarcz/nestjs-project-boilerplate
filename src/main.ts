@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from 'app.module';
+import { AppModule } from 'src/app.module';
 import { configureInputValidation } from './core/validation/validation.config';
 import { configureSwagger } from './core/http/swagger/swagger.config';
 import { configureCors } from './core/http/cors/cors.config';

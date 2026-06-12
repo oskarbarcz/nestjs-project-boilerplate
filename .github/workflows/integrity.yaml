@@ -4,29 +4,34 @@ on:
   pull_request:
 
 jobs:
-  version:
-    runs-on: ubuntu-latest
+  files:
+    runs-on: ubuntu-24.04
     steps:
-      - name: 'Checkout repository'
-        uses: 'actions/checkout@v4'
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
-      - name: 'Check if image version is available to publish'
-        run: './docker/ci/check_version_is_free "$(jq -r ''.version'' package.json)"'
+      - name: Check for CRLF line endings
+        uses: gi-org-pl/check-crlf-action@v1
+      - name: Check for file permission changes
+        uses: gi-org-pl/check-file-permissions-action@v1
+      - name: Check app version is unique
+        uses: gi-org-pl/check-version-action@v1
+        with:
+          version: "$(jq -r '.version' package.json)"
   code:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - name: 'Checkout repository'
-        uses: actions/checkout@v4
-      - name: 'Copy environment variables'
-        run: 'cp .env.dist .env'
-      - name: 'Run docker compose environment'
-        run: 'docker compose up -d --build --wait --wait-timeout=120'
-      - name: 'Run dependency audit'
-        run: 'docker compose exec app npm audit'
-      - name: 'Run code formatting check'
-        run: 'docker compose exec app npm run format'
-      - name: 'Run static code analysis'
-        run: 'docker compose exec app npm run lint'
-      - name: 'Run functional tests'
-        run: 'docker compose exec app npm run test:functional'
+      - name: Checkout repository
+        uses: actions/checkout@v6
+      - name: Set up environment
+        run: cp .env.dist .env
+      - name: Run Docker environment
+        run: docker compose up -d --build --wait
+        timeout-minutes: 3
+      - name: Run code formatting check
+        run: docker compose exec app npm run format
+      - name: Run static code analysis
+        run: docker compose exec app npm run lint
+      - name: Run end-to-end tests
+        run: docker compose exec app npm run test:functional

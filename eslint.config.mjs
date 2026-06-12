@@ -1,44 +1,39 @@
-import typescriptEslintEslintPlugin from '@typescript-eslint/eslint-plugin';
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
+import prettierPlugin from 'eslint-plugin-prettier';
+import prettierConfig from 'eslint-config-prettier';
 import globals from 'globals';
-import tsParser from '@typescript-eslint/parser';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
-import js from '@eslint/js';
-import { FlatCompat } from '@eslint/eslintrc';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-    baseDirectory: __dirname,
-    recommendedConfig: js.configs.recommended,
-    allConfig: js.configs.all,
-});
-
-export default [
+export default tseslint.config(
+    eslint.configs.recommended,
+    ...tseslint.configs.recommended,
     {
-        ignores: ['dist/', 'node_modules/', 'prisma/client'],
-    },
-    ...compat.extends(
-        'plugin:@typescript-eslint/recommended',
-        'plugin:prettier/recommended',
-    ),
-    {
-        plugins: {
-            '@typescript-eslint': typescriptEslintEslintPlugin,
-        },
-
         languageOptions: {
             globals: {
                 ...globals.node,
                 ...globals.jest,
             },
-
-            parser: tsParser,
-            ecmaVersion: 'latest',
-            sourceType: 'module',
+            parser: tseslint.parser,
+            parserOptions: {
+                project: 'tsconfig.json',
+                tsconfigRootDir: import.meta.dirname,
+                sourceType: 'module',
+            },
+        },
+        plugins: {
+            '@typescript-eslint': tseslint.plugin,
+            prettier: prettierPlugin,
         },
         rules: {
+            ...prettierConfig.rules,
+            ...prettierPlugin.configs.recommended.rules,
+            '@typescript-eslint/interface-name-prefix': 'off',
+            '@typescript-eslint/explicit-function-return-type': 'off',
+            '@typescript-eslint/explicit-module-boundary-types': 'off',
             '@typescript-eslint/no-explicit-any': 'off',
         },
     },
-];
+    {
+        ignores: ['eslint.config.mjs', 'prisma/client', 'cucumber.js', 'dist'],
+    },
+);
