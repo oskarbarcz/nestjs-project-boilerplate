@@ -1,8 +1,9 @@
-.idea/
-coverage/
-node_modules/
-dist/
-output/
+/.idea/
+/coverage/
+/node_modules/
+/prisma/client
+/dist/
+/output
 
-.env
-.eslintcache
+/.env
+/.eslintcache
